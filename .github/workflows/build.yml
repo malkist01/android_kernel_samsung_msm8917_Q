@@ -36,20 +36,3 @@ jobs:
          CHATID: ${{ secrets.CHAT_ID }}
          API_BOT: ${{ secrets.BOT_API }}
          
-    - name: Create flashable.zip
-      run: |
-          git clone https://github.com/malkist01/anykernel3.git AnyKernel3 -b master
-          rm -rf AnyKernel3/.git AnyKernel3/.github AnyKernel3/LICENSE AnyKernel3/README.md AnyKernel3/modules AnyKernel3/patch AnyKernel3/ramdisk
-          if [[ -f $OUT_DIR/zImage.dtb ]]; then
-            cp $OUT_DIR/zImage-dtb AnyKernel3/zImage-dtb
-          fi
-    - name: Upload Artifact
-      run: |
-          mkdir Upload
-          cp -rf AnyKernel3/* Upload
-    - id: Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: "${{ inputs.name }}"
-        path: Upload/*
-# Enjoy Your Life....
