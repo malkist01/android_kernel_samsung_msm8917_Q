@@ -76,11 +76,21 @@ BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 
 BUILD_SUCCESS=$?
-if [ $BUILD_SUCCESS != 0 ]
-	then
-		echo "$red Error: Build failed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds $reset"
-		exit
-fi
-
-
-echo -e "$green Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds $reset"
+     if ! [ -a "$IMAGE" ]; then
+        finderr
+        exit 1
+     fi
+    git clone --depth=1 https://github.com/malkist01/anykernel3.git AnyKernel -b master
+    cp $OUT_DIR/arch/arm/boot/zImage-dtb AnyKernel
+}
+# Zipping
+zipping() {
+    cd AnyKernel || exit 1
+    zip -r9 Teletubies-"${CODENAME}"-Arm"${DATE}".zip ./*
+    cd ..
+}
+compile
+zipping
+END=$(date +"%s")
+DIFF=$(($END - $START))
+push
