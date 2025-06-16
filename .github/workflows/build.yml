@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  sleepybuild:
+  build:
     runs-on: ubuntu-22.04
 
     steps:
@@ -23,5 +23,27 @@ jobs:
           chmod +x build.sh && bash build.sh
       shell: bash
       env:
+         TZ: Asia/Jakarta
          CHATID: ${{ secrets.CHAT_ID }}
          API_BOT: ${{ secrets.BOT_API }}
+    - name: Package kernel
+        run: |
+          git clone --depth=1 ${{ env.ANYKERNEL_SOURCE }} -b ${{ env.ANYKERNEL_SOURCE_BRANCH }} AnyKernel3 && rm -rf AnyKernel3/.git AnyKernel3/.github AnyKernel3/LICENSE AnyKernel3/README.md
+          if [[ -f out/arch/arm/boot/zImage.gz-dtb ]]; then
+            cp out/arch/arm/boot/zImage.gz-dtb AnyKernel3/Image.gz-dtb
+          elif [[ -f out/arch/arm/boot/zImage-dtb ]]; then
+            cp out/arch/arm/boot/zImage-dtb AnyKernel3/Image-dtb
+          elif [[ -f out/arch/arm/boot/zImage.gz ]]; then
+            cp out/arch/arm/boot/zImage.gz AnyKernel3/Image.gz
+          elif [[ -f out/arch/arm/boot/Image ]]; then
+            cp out/arch/arm/boot/Image AnyKernel3/Image
+          fi
+          if [ -f out/arch/arm/boot/dtbo.img ]; then
+            cp out/arch/arm/boot/dtbo.img AnyKernel3/dtbo.img
+          fi
+
+      - name: Upload kernel to artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: output_kernel
+          path: AnyKernel3/*
