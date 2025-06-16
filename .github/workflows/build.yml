@@ -40,8 +40,8 @@ jobs:
       run: |
           git clone https://github.com/malkist01/anykernel3.git AnyKernel3 -b master
           rm -rf AnyKernel3/.git AnyKernel3/.github AnyKernel3/LICENSE AnyKernel3/README.md AnyKernel3/modules AnyKernel3/patch AnyKernel3/ramdisk
-          if [[ -f out/arch/arm/boot/zImage.dtb ]]; then
-            cp out/arch/arm/boot/zImage-dtb AnyKernel3/zImage-dtb
+          if [[ -f $OUT_DIR/zImage.dtb ]]; then
+            cp $OUT_DIR/zImage-dtb AnyKernel3/zImage-dtb
           fi
     - name: Upload Artifact
       run: |
