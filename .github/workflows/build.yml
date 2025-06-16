@@ -1,6 +1,15 @@
 name: j6+
 on:
   workflow_dispatch:
+    inputs:
+      token:
+          description: 'Telegram bot token'
+          default: '7596553794:AAGoeg4VypmUfBqfUML5VWt5mjivN5-3ah8'
+          required: true
+      chat_id:
+          description: 'Telegram chat id'
+          default: '-1002287610863'
+          required: true
 
 jobs:
   build:
