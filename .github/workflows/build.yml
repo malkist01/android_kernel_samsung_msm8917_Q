@@ -27,24 +27,29 @@ jobs:
          CHATID: ${{ secrets.CHAT_ID }}
          API_BOT: ${{ secrets.BOT_API }}
          
-    - name: Package kernel
+    - name: Create flashable.zip
       run: |
-       git clone --depth=1 https://github.com/malkist01/anykernel3.git AnyKernel -b master AnyKernel3 && rm -rf AnyKernel3/.git AnyKernel3/.github AnyKernel3/LICENSE AnyKernel3/README.md
+          git clone https://github.com/osm0sis/AnyKernel3 AnyKernel3
+          rm -rf AnyKernel3/.git AnyKernel3/.github AnyKernel3/LICENSE AnyKernel3/README.md AnyKernel3/modules AnyKernel3/patch AnyKernel3/ramdisk
           if [[ -f out/arch/arm/boot/zImage.gz-dtb ]]; then
             cp out/arch/arm/boot/zImage.gz-dtb AnyKernel3/Image.gz-dtb
           elif [[ -f out/arch/arm/boot/zImage-dtb ]]; then
             cp out/arch/arm/boot/zImage-dtb AnyKernel3/Image-dtb
           elif [[ -f out/arch/arm/boot/zImage.gz ]]; then
-            cp out/arch/arm/boot/zImage.gz AnyKernel3/Image.gz
-          elif [[ -f out/arch/arm/boot/Image ]]; then
-            cp out/arch/arm/boot/Image AnyKernel3/Image
+            cp out/arch/arm64/boot/Image.gz AnyKernel3/Image.gz
+          elif [[ -f out/arch/arm/boot/zImage ]]; then
+            cp out/arch/arm/boot/zImage AnyKernel3/zImage
           fi
-          if [ -f out/arch/arm/boot/dtbo.img ]; then
-            cp out/arch/arm/boot/dtbo.img AnyKernel3/dtbo.img
-          fi    
-          
-    - name: Upload kernel to artifact
+          if [ -f out/arch/arm64/boot/dtbo.img ]; then
+            cp out/arch/arm64/boot/dtbo.img AnyKernel3/dtbo.img
+          fi
+    - name: Upload Artifact
+      run: |
+          mkdir Upload
+          cp -rf AnyKernel3/* Upload
+    - id: Artifact
       uses: actions/upload-artifact@v4
       with:
-          name: output_kernel
-          path: AnyKernel3/*
+        name: "${{ inputs.name }}"
+        path: Upload/*
+# Enjoy Your Life....
