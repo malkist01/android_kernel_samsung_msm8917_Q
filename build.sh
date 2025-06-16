@@ -16,15 +16,15 @@ export SUBARCH=arm
 
 # Set kernel name and defconfig
 # export VERSION=
-DEF=j4primelte_defconfig
+DEF=j6primelte_defconfig
 export DEFCONFIG=$DEF
 
 # Keep it as is
 export LOCALVERSION=$VERSION
 
 # Export Username and machine name
-export KBUILD_BUILD_USER=Batu33TR
-export KBUILD_BUILD_HOST=ProjectMedusa
+export KBUILD_BUILD_USER=malkist
+export KBUILD_BUILD_HOST=android
 
 # Color definition
 red=`tput setaf 1`
