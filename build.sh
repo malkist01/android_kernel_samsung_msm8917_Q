@@ -20,7 +20,7 @@ DEF=j4primelte_defconfig
 export DEFCONFIG=$DEF
 
 # Keep it as is
-export LOCALVERSION=$VERSION
+export LOCALVERSION=-Teletubies
 
 # Export Username and machine name
 export KBUILD_BUILD_USER=malkist
